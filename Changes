@@ -1,0 +1,12 @@
+Revision history for Perl extension Units::Base.
+
+0.2.0 Sun Sep 5 16:30:00 1999
+      - renamed package to "Units"
+      - redid version style
+	- added Units::Type
+	- rewrote README
+
+0.10  Sat Sep 4 21:08:20 1999
+	- original release (distributed as Units-Length-0.10)
+
+

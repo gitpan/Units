@@ -1,0 +1,49 @@
+package Units::Type;
+require 5.004;
+require Exporter;
+
+use vars qw($VERSION $self);
+$VERSION = "0.1.1";
+
+use Units::Base;
+
+my $self = new Units::Base
+  (
+# The actual units, relative to each other (in this case, in inches)
+    {
+             inch	=> 1,
+             pica	=> 1/6,
+            point => 1/72,
+             twip	=> 1/1440,
+       centimeter	=> 0.3937,
+       millimeter => 0.03937
+    },
+# Synonyms and abbreviations for these units
+    {
+               cm	=> centimeter,
+               mm	=> millimeter,
+               in	=> inch,
+               pt	=> point,
+               pc	=> pica
+    },
+# Mulipliers (so we can say "dozen inches" or "sixteenths of an inch")
+    {
+             half	=> 1/2,
+            third	=> 1/3,
+          quarter	=> 1/4,
+           eighth	=> 1/8,
+           twelth	=> 1/12
+    },
+# The default unit to convert to (when none is specified)
+    "point"
+);
+
+# A stup for converting units
+sub convert
+{
+    return $self->convert_units (@_);
+}
+
+1;
+
+__END__
