@@ -4,6 +4,7 @@ Length.pm
 Makefile.PL
 MANIFEST
 README
+Temperature.pm
 test.pl
 Type.pm
 

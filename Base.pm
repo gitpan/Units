@@ -8,7 +8,7 @@ use vars qw($VERSION);
 
 use Carp;
 
-$VERSION = "0.3.0";
+$VERSION = "0.40";
 
 sub initialize {
     my $self = shift;
@@ -129,9 +129,26 @@ sub convert_units
         $unit_to 	= $default_unit;
     }
 
-    my $inches 	= $amount * ${$self->{conversions}}{$unit};
+    my $M, $A;
+    my $U = ${$self->{conversions}}{$unit};
+    if (ref($U) eq "ARRAY") {
+        ($M, $A) = @{$U};
+    } else {
+        $M = $U;
+        $A = 0;
+    }
 
-    my $result 	= $inches / ${$self->{conversions}}{$unit_to} / $multiple;
+    my $def_unit 	= ($amount + $A) * $M;
+
+    $U = ${$self->{conversions}}{$unit_to};
+    if (ref($U) eq "ARRAY") {
+        ($M, $A) = @{$U};
+    } else {
+        $M = $U;
+        $A = 0;
+    }
+
+    my $result 	= (($def_unit / $M) - $A) / $multiple;
 
     return $result;
 }
@@ -230,6 +247,7 @@ The current distribution contains the following packages:
 
     Units::Base         - a base module that does all of the work
     Units::Length	      - a module for converting units of length
+    Units::Temperature  - a module for converting units of temperature
     Units::Type         - a module for converting units of type
 
 Units::Base by itself does nothing. Another module needs to use it
@@ -248,19 +266,20 @@ to be manually defined.)
 =head2 Known Issues
 
 The current release should be considered "beta" until further testing
-and refinements have been made.
+and refinements have been made. Then again, maybe "alpha" is more
+accurate.
 
 The current version does not yet handle fractions such as "1/2 in".
 It should handle decimals such as "0.5 in".
 
-The way relationships are specified I<will> be rewritten, since it
-cannot handle addition/subtraction (so converting units of temperature
-between Fahrenheight, Kelvin, and Celsius cannot be done.)
+Relationships have been rewritten to be handle A(x+b) as well Ax.
+They may be redone in the future to handle more complex
+relationships, if the need arises.
 
 =head2 Future Enhancements
 
 Aside from bug fixes, optimizations, and making the string parsing
-conform more to the "menifesto" above, obvious additions would be modules
+conform more to the "manifesto" above, obvious additions would be modules
 for converting between units of area, volume, weight... (although if
 Math::Units does what you need, use that instead.)
 
@@ -269,6 +288,7 @@ An example hierarchy for future modules:
     Units::
     ::Length		- general measures of length
     ::Area
+    ::Pressure
     ::Volume
 
     Units::Length
@@ -287,8 +307,8 @@ conversions.
 
 =head1 SEE ALSO
 
-I<Units::Length> and I<Units::Type> modules, which demonstrate
-how this unit is used.
+I<Units::Length>, I<Units::Temperature> and I<Units::Type> modules, which
+demonstrate how I<Units::Base> is used.
 
 =head1 AUTHOR
 

@@ -1,5 +1,10 @@
 Revision history for Perl extension Units package.
 
+0.40  Sun Sep 12 18:10:03 1999
+      - added ability to use A(x+B) conversions as well as Ax to Units::Base
+      - added Units::Temperature module
+      - redid version style (again)
+
 0.3.0 Wed Sep 8 00:58:56 1999
 	- fixed bug with specifying negative value (ie, "-720 twips")
 	- fixed bug with specifying 0 value (ie, "0in")

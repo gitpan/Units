@@ -3,7 +3,7 @@ require 5.004;
 require Exporter;
 
 use vars qw($VERSION $self);
-$VERSION = "0.1.3";
+$VERSION = "0.131";
 
 use Units::Base;
 
