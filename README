@@ -1,67 +1,141 @@
+NAME
 
-The Units package is a collection of modules for parsing strings with
-unit measurements (such as "12pt" or "3 meters") and converting them
-to some other unit (such as "picas" or "inches").
+    Units::Base - base object for performing unit conversions
 
-The current distribution contains the following packages:
+DESCRIPTION
 
-    Units::Base		- a base module that does all of the work
-    Units::Length		- a module for converting units of length
-    Units::Type		- a module for converting units of type
+    The Units package is a collection of modules for parsing strings
+    with unit measurements (such as "12pt" or "3 meters") and
+    converting them to some other unit (such as "picas" or
+    "inches").
 
-Units::Base by itself does nothing. Another module needs to use it
-to create definitions of what units of measurement it handles and
-how they are related to each other (ie, 1 m = 100 cm).
+    It uses a base package (Units::Base) which does the dirty work.
+    Other modules define what units they handle and how they are
+    related.
 
-The base unit also allows for synonym and abbreviations to be
-defined.
+  Why a Separate Module?
 
-It also allows common "multiples" to be defined, so that it can
-handle things like "18 half-points" or "6 dozen feet" or even
-convert millimters to "sixteenths of an inch". (It does not yet
-handle Greek prefixes like centi- or mega- ... those will have
-to be manually defined.)
+    It is *intentionally* distinct from the Math::Units module. Why?
+    The Math::Units module implies that unit conversions are
+    *exact*, with one-to-one relationships. This is fine for
+    scientific work. It's even fine for some general purpose/real-
+    world uses (such as converting Fehrenheight to Celcius).
 
-Required Modules:
+    Real-world measurement systems are conflicting. For instance, a
+    "point" in typography is equivalent to 1/72 inch, according to
+    PostScript specs and common usage. Other type systems consider
+    it 1/72.27 inch, or 0.01383 inches, or 0.0148 inches. Outside of
+    that context, a point may be 1/120 or 1/144 inch.
 
-    Carp
+    Common notations and abbreviations also depend on context. Does
+    "12 pt" mean "12 point", "12 parts" or "12 pints"?
 
-Author:
+    Even without conflicts in the definition of a particular unit,
+    there's no need to convert point sizes for fonts into miles or
+    light-years. Typesetters, surveyors and astronomers user
+    different scales as well as systems.
 
-    Robert Rothenberg <wlkngowl@unix.asb.com>
+  People do not think like computers
 
-Notes:
+    Not everyone uses the metric system.
 
-The current release should be considered "beta" until further testing
-and refinements have been made.
+    And even less people say things like "5.25 feet". Often it's "5
+    feet, 3 inches" or "5 1/4 feet".
 
-Obvious additions would be modules for converting between units of
-area, volume, weight, ...
+    Despite having ten fingers and toes, people don't think in tens.
+    They think in twos, threes, fours, twelves, and sixteens. And
+    sometimes they use fractional measurements like quarter-inches,
+    sixteenths-of-an-inch, or half-pints.
 
-For what it's worth, I originally wrote this module to convert between
-typographical measurements (so that one could specify "1 pica" or "12
-points" interchangably).  It makes too much sense not to generalize the
-module for other measurement conversions.
+    The purpose of this module is to allow people to use the
+    measurement systems they are familiar with, and that is
+    appropriate to what they are doing.
 
-Note that it makes little sense to include all units of a length in one
-module: there's little use to convert "light-years" into "barleycorns".
-Specialized systems deserve their own modules, such as ::Astronomy,
-::Chemistry, or Units::Textile....
+  Rationale
 
-I am proposing the following organization for modules (actually writing
-these modules is left as a project for other authors...):
+    The Units:: hierarchy is an attempt to keep measurement systems
+    in distinct classes. Thus one can have modules for converting
+    between typography units (points, picas) distinct from common
+    units of length (or area, temperature, etc.), specialized units
+    (for Astronomy, Chemistry, Physics, Textiles, Winery,
+    Navigation, etc.) or even traditional or regional systems
+    (Japanese, Chinese, Egyptian, archaic systems, etc.) and to keep
+    conflicting measurement systems distinct.
 
-    Units
-      ::Length		- general measures of length
-        ::Chinese		- specialized regional/traditional systems
+  Release Notes
+
+    The current distribution contains the following packages:
+
+        Units::Base         - a base module that does all of the work
+        Units::Length             - a module for converting units of length
+        Units::Type         - a module for converting units of type
+
+    Units::Base by itself does nothing. Another module needs to use
+    it to create definitions of what units of measurement it handles
+    and how they are related to each other (ie, 1 m = 100 cm).
+
+    The base unit also allows for synonym and abbreviations to be
+    defined.
+
+    It also allows common "multiples" to be defined, so that it can
+    handle things like "18 half-points" or "6 dozen feet" or even
+    convert millimters to "sixteenths of an inch". (It does not yet
+    handle Greek prefixes like centi- or mega- ... those will have
+    to be manually defined.)
+
+  Known Issues
+
+    The current release should be considered "beta" until further
+    testing and refinements have been made.
+
+    The current version does not yet handle fractions such as "1/2
+    in". It should handle decimals such as "0.5 in".
+
+    The way relationships are specified *will* be rewritten, since
+    it cannot handle addition/subtraction (so converting units of
+    temperature between Fahrenheight, Kelvin, and Celsius cannot be
+    done.)
+
+  Future Enhancements
+
+    Aside from bug fixes, optimizations, and making the string
+    parsing conform more to the "menifesto" above, obvious additions
+    would be modules for converting between units of area, volume,
+    weight... (although if Math::Units does what you need, use that
+    instead.)
+
+    An example hierarchy for future modules:
+
+        Units::
+        ::Length            - general measures of length
+        ::Area
+        ::Volume
+
+        Units::Length
+        ::Chinese           - specialized regional/traditional systems
         ::English
-      ::Area
-      ::Volume
-      ::Astronomy
-        ::Length		- or Distance...?
 
-The only stipulation would be that all modules for converting between
-units of length share a common unit (such as meters) to that they can
-be translated.
+        Units::Astronomy
+        ::Length            - or Distance...?
 
+    Modules should share a common unit (preferably metric) to allow
+    for conversions.
+
+REQUIRED MODULES
+
+        Carp
+
+SEE ALSO
+
+    *Units::Length* and *Units::Type* modules, which demonstrate how
+    this unit is used.
+
+AUTHOR
+        Robert Rothenberg <wlkngowl@unix.asb.com>
+
+LICENSE
+
+    Copyright (c) 1999 Robert Rothenberg. All rights reserved. This
+    program is free software; you can redistribute it and/or modify
+    it under the same terms as Perl itself.
 

@@ -3,7 +3,7 @@ require 5.004;
 require Exporter;
 
 use vars qw($VERSION $self);
-$VERSION = "0.1.2";
+$VERSION = "0.1.3";
 
 use Units::Base;
 
@@ -34,7 +34,9 @@ my $self = new Units::Base
            micron	=> micrometer,
                mi	=> mile,
                ft	=> foot,
+             "\'" => foot,
                in	=> inch,
+             "\"" => inch,
                yd	=> yard,
                 y	=> yard
     },
@@ -62,10 +64,16 @@ my $self = new Units::Base
 );
 
 
-# A stup for converting units
+# A stub for converting units
 sub convert
 {
     return $self->convert_units (@_);
+}
+
+# A stub for parsing strings (such as "1 foot, 3 inches")
+sub parse
+{
+    return $self->parse_string (@_);
 }
 
 1;

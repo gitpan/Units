@@ -1,4 +1,10 @@
-Revision history for Perl extension Units::Base.
+Revision history for Perl extension Units package.
+
+0.3.0 Wed Sep 8 00:58:56 1999
+	- fixed bug with specifying negative value (ie, "-720 twips")
+	- fixed bug with specifying 0 value (ie, "0in")
+	- fixed bug with decimal values (such as "0.5 in")
+	- added parse_string method to handle strings such as "1ft, 3in"
 
 0.2.0 Sun Sep 5 16:30:00 1999
       - renamed package to "Units"
